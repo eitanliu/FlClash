@@ -27,6 +27,16 @@ class _ProxiesFragmentState extends ConsumerState<ProxiesFragment>
 
   @override
   get actions => [
+        if (_isTab)
+          IconButton(
+            onPressed: () {
+              _proxiesTabKey.currentState?.scrollToGroupSelected();
+            },
+            icon: Icon(
+              Icons.adjust,
+              weight: 1,
+            ),
+          ),
         CommonPopupBox(
           targetBuilder: (open) {
             return IconButton(
@@ -76,30 +86,23 @@ class _ProxiesFragmentState extends ConsumerState<ProxiesFragment>
                     );
                   },
                 ),
-              _isTab
-                  ? PopupMenuItemData(
-                      icon: Icons.adjust_outlined,
-                      label: "聚焦",
-                      onPressed: () {
-                        _proxiesTabKey.currentState?.scrollToGroupSelected();
-                      },
-                    )
-                  : PopupMenuItemData(
-                      icon: Icons.style_outlined,
-                      label: appLocalizations.iconConfiguration,
-                      onPressed: () {
-                        showExtend(
-                          context,
-                          builder: (_, type) {
-                            return AdaptiveSheetScaffold(
-                              type: type,
-                              body: const _IconConfigView(),
-                              title: appLocalizations.iconConfiguration,
-                            );
-                          },
+              if (!_isTab)
+                PopupMenuItemData(
+                  icon: Icons.style_outlined,
+                  label: appLocalizations.iconConfiguration,
+                  onPressed: () {
+                    showExtend(
+                      context,
+                      builder: (_, type) {
+                        return AdaptiveSheetScaffold(
+                          type: type,
+                          body: const _IconConfigView(),
+                          title: appLocalizations.iconConfiguration,
                         );
                       },
-                    ),
+                    );
+                  },
+                ),
             ],
           ),
         )
@@ -208,6 +211,10 @@ class _ProxiesFragmentState extends ConsumerState<ProxiesFragment>
           _isTab = next.type == ProxiesType.tab;
           initPageState();
           return;
+        } else {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            ref.read(proxiesQueryProvider.notifier).value = "";
+          });
         }
       },
     );
