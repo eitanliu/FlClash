@@ -461,50 +461,48 @@ class RuleContent extends ConsumerWidget {
     );
   }
 
-  Widget _buildItem(Rule rule, int index) {
-    return Consumer(
-      builder: (context, ref, ___) {
-        final isSelected = ref.watch(profileOverrideStateProvider.select(
-          (item) => item.selectedRules.contains(rule.id),
-        ));
-        return Material(
-          color: Colors.transparent,
-          child: Container(
-            margin: EdgeInsets.symmetric(
-              vertical: 4,
-            ),
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: isSelected
-                  ? context.colorScheme.secondaryContainer.opacity80
-                  : context.colorScheme.surfaceContainer,
-              borderRadius: BorderRadius.circular(18),
-            ),
-            clipBehavior: Clip.hardEdge,
-            child: ListTile(
-              minTileHeight: 0,
-              minVerticalPadding: 0,
-              titleTextStyle: context.textTheme.bodyMedium?.toJetBrainsMono,
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 16,
-              ),
-              trailing: SizedBox(
-                width: 24,
-                height: 24,
-                child: CommonCheckBox(
-                  value: isSelected,
-                  isCircle: true,
-                  onChanged: (_) {
-                    _handleSelect(ref, rule.id);
-                  },
-                ),
-              ),
-              title: Text(rule.value),
+  Widget _buildItem({
+    required Rule rule,
+    required bool isSelected,
+    required VoidCallback onTab,
+    required BuildContext context,
+  }) {
+    return Material(
+      color: Colors.transparent,
+      child: Container(
+        margin: EdgeInsets.symmetric(
+          vertical: 4,
+        ),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: isSelected
+              ? context.colorScheme.secondaryContainer.opacity80
+              : context.colorScheme.surfaceContainer,
+          borderRadius: BorderRadius.circular(18),
+        ),
+        clipBehavior: Clip.hardEdge,
+        child: ListTile(
+          minTileHeight: 0,
+          minVerticalPadding: 0,
+          titleTextStyle: context.textTheme.bodyMedium?.toJetBrainsMono,
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 16,
+          ),
+          trailing: SizedBox(
+            width: 24,
+            height: 24,
+            child: CommonCheckBox(
+              value: isSelected,
+              isCircle: true,
+              onChanged: (_) {
+                onTab();
+              },
             ),
           ),
-        );
-      },
+          title: Text(rule.value),
+        ),
+      ),
     );
   }
 
@@ -526,19 +524,21 @@ class RuleContent extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    final vm2 = ref.watch(
+    final vm3 = ref.watch(
       profileOverrideStateProvider.select(
         (state) {
           final overrideRule = state.overrideData?.rule;
-          return VM2(
+          return VM3(
             a: overrideRule?.rules ?? [],
             b: overrideRule?.type ?? OverrideRuleType.added,
+            c: state.selectedRules,
           );
         },
       ),
     );
-    final rules = vm2.a;
-    final type = vm2.b;
+    final rules = vm3.a;
+    final type = vm3.b;
+    final selectedRules = vm3.c;
     if (rules.isEmpty) {
       return SliverToBoxAdapter(
         child: SizedBox(
@@ -580,14 +580,17 @@ class RuleContent extends ConsumerWidget {
           child: ReorderableDragStartListener(
             index: index,
             child: _buildItem(
-              rule,
-              index,
+              rule: rule,
+              isSelected: selectedRules.contains(rule.id),
+              onTab: () {
+                _handleSelect(ref, rule.id);
+              },
+              context: context,
             ),
           ),
           onTap: () {
             _handleSelect(ref, rule.id);
           },
-          // },
         );
       },
       proxyDecorator: _proxyDecorator,
