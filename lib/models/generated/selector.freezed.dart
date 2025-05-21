@@ -4237,7 +4237,6 @@ abstract class _VpnState implements VpnState {
 /// @nodoc
 mixin _$ProfileOverrideStateModel {
   ClashConfigSnippet? get snippet => throw _privateConstructorUsedError;
-  bool get isEdit => throw _privateConstructorUsedError;
   Set<String> get selectedRules => throw _privateConstructorUsedError;
   OverrideData? get overrideData => throw _privateConstructorUsedError;
 
@@ -4256,7 +4255,6 @@ abstract class $ProfileOverrideStateModelCopyWith<$Res> {
   @useResult
   $Res call(
       {ClashConfigSnippet? snippet,
-      bool isEdit,
       Set<String> selectedRules,
       OverrideData? overrideData});
 
@@ -4281,7 +4279,6 @@ class _$ProfileOverrideStateModelCopyWithImpl<$Res,
   @override
   $Res call({
     Object? snippet = freezed,
-    Object? isEdit = null,
     Object? selectedRules = null,
     Object? overrideData = freezed,
   }) {
@@ -4290,10 +4287,6 @@ class _$ProfileOverrideStateModelCopyWithImpl<$Res,
           ? _value.snippet
           : snippet // ignore: cast_nullable_to_non_nullable
               as ClashConfigSnippet?,
-      isEdit: null == isEdit
-          ? _value.isEdit
-          : isEdit // ignore: cast_nullable_to_non_nullable
-              as bool,
       selectedRules: null == selectedRules
           ? _value.selectedRules
           : selectedRules // ignore: cast_nullable_to_non_nullable
@@ -4345,7 +4338,6 @@ abstract class _$$ProfileOverrideStateModelImplCopyWith<$Res>
   @useResult
   $Res call(
       {ClashConfigSnippet? snippet,
-      bool isEdit,
       Set<String> selectedRules,
       OverrideData? overrideData});
 
@@ -4371,7 +4363,6 @@ class __$$ProfileOverrideStateModelImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? snippet = freezed,
-    Object? isEdit = null,
     Object? selectedRules = null,
     Object? overrideData = freezed,
   }) {
@@ -4380,10 +4371,6 @@ class __$$ProfileOverrideStateModelImplCopyWithImpl<$Res>
           ? _value.snippet
           : snippet // ignore: cast_nullable_to_non_nullable
               as ClashConfigSnippet?,
-      isEdit: null == isEdit
-          ? _value.isEdit
-          : isEdit // ignore: cast_nullable_to_non_nullable
-              as bool,
       selectedRules: null == selectedRules
           ? _value._selectedRules
           : selectedRules // ignore: cast_nullable_to_non_nullable
@@ -4401,15 +4388,12 @@ class __$$ProfileOverrideStateModelImplCopyWithImpl<$Res>
 class _$ProfileOverrideStateModelImpl implements _ProfileOverrideStateModel {
   const _$ProfileOverrideStateModelImpl(
       {this.snippet,
-      required this.isEdit,
       required final Set<String> selectedRules,
       this.overrideData})
       : _selectedRules = selectedRules;
 
   @override
   final ClashConfigSnippet? snippet;
-  @override
-  final bool isEdit;
   final Set<String> _selectedRules;
   @override
   Set<String> get selectedRules {
@@ -4423,7 +4407,7 @@ class _$ProfileOverrideStateModelImpl implements _ProfileOverrideStateModel {
 
   @override
   String toString() {
-    return 'ProfileOverrideStateModel(snippet: $snippet, isEdit: $isEdit, selectedRules: $selectedRules, overrideData: $overrideData)';
+    return 'ProfileOverrideStateModel(snippet: $snippet, selectedRules: $selectedRules, overrideData: $overrideData)';
   }
 
   @override
@@ -4432,7 +4416,6 @@ class _$ProfileOverrideStateModelImpl implements _ProfileOverrideStateModel {
         (other.runtimeType == runtimeType &&
             other is _$ProfileOverrideStateModelImpl &&
             (identical(other.snippet, snippet) || other.snippet == snippet) &&
-            (identical(other.isEdit, isEdit) || other.isEdit == isEdit) &&
             const DeepCollectionEquality()
                 .equals(other._selectedRules, _selectedRules) &&
             (identical(other.overrideData, overrideData) ||
@@ -4440,7 +4423,7 @@ class _$ProfileOverrideStateModelImpl implements _ProfileOverrideStateModel {
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, snippet, isEdit,
+  int get hashCode => Object.hash(runtimeType, snippet,
       const DeepCollectionEquality().hash(_selectedRules), overrideData);
 
   /// Create a copy of ProfileOverrideStateModel
@@ -4456,14 +4439,11 @@ class _$ProfileOverrideStateModelImpl implements _ProfileOverrideStateModel {
 abstract class _ProfileOverrideStateModel implements ProfileOverrideStateModel {
   const factory _ProfileOverrideStateModel(
       {final ClashConfigSnippet? snippet,
-      required final bool isEdit,
       required final Set<String> selectedRules,
       final OverrideData? overrideData}) = _$ProfileOverrideStateModelImpl;
 
   @override
   ClashConfigSnippet? get snippet;
-  @override
-  bool get isEdit;
   @override
   Set<String> get selectedRules;
   @override

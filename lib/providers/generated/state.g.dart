@@ -1961,7 +1961,7 @@ class _GenColorSchemeProviderElement
 }
 
 String _$profileOverrideStateHash() =>
-    r'16d7c75849ed077d60553e5d2bba4ed54b307971';
+    r'fa26570a355ab39e27b1f93d1d2f358717065592';
 
 /// See also [ProfileOverrideState].
 @ProviderFor(ProfileOverrideState)

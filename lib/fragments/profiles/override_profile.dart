@@ -81,7 +81,9 @@ class _OverrideProfileState extends State<OverrideProfile> {
       },
     );
     ref.read(profileOverrideStateProvider.notifier).updateState(
-          (state) => state.copyWith(isEdit: false, selectedRules: {}),
+          (state) => state.copyWith(
+            selectedRules: {},
+          ),
         );
   }
 
@@ -168,16 +170,12 @@ class _OverrideProfileState extends State<OverrideProfile> {
         },
         child: Consumer(
           builder: (_, ref, ___) {
-            final vm2 = ref.watch(
+            final editCount = ref.watch(
               profileOverrideStateProvider.select(
-                (state) => VM2(
-                  a: state.isEdit,
-                  b: state.selectedRules.length,
-                ),
+                (state) => state.selectedRules.length,
               ),
             );
-            final isEdit = vm2.a;
-            final editCount = vm2.b;
+            final isEdit = editCount != 0;
             return CommonScaffold(
               title: appLocalizations.override,
               body: _buildContent(),
@@ -271,7 +269,6 @@ class _OverrideProfileState extends State<OverrideProfile> {
                 onExit: () {
                   ref.read(profileOverrideStateProvider.notifier).updateState(
                         (state) => state.copyWith(
-                          isEdit: false,
                           selectedRules: {},
                         ),
                       );
@@ -347,7 +344,7 @@ class RuleTitle extends ConsumerWidget {
         (state) {
           final overrideRule = state.overrideData?.rule;
           return VM3(
-            a: state.isEdit,
+            a: state.selectedRules.isNotEmpty,
             b: state.selectedRules.containsAll(
               overrideRule?.rules.map((item) => item.id).toSet() ?? {},
             ),
@@ -467,15 +464,9 @@ class RuleContent extends ConsumerWidget {
   Widget _buildItem(Rule rule, int index) {
     return Consumer(
       builder: (context, ref, ___) {
-        final vm2 = ref.watch(profileOverrideStateProvider.select(
-          (item) => VM2(
-            a: item.isEdit,
-            b: item.selectedRules.contains(rule.id),
-          ),
+        final isSelected = ref.watch(profileOverrideStateProvider.select(
+          (item) => item.selectedRules.contains(rule.id),
         ));
-        final isEdit = vm2.a;
-        final isSelected = vm2.b;
-
         return Material(
           color: Colors.transparent,
           child: Container(
@@ -501,18 +492,13 @@ class RuleContent extends ConsumerWidget {
               trailing: SizedBox(
                 width: 24,
                 height: 24,
-                child: !isEdit
-                    ? ReorderableDragStartListener(
-                        index: index,
-                        child: const Icon(Icons.drag_handle),
-                      )
-                    : CommonCheckBox(
-                        value: isSelected,
-                        isCircle: true,
-                        onChanged: (_) {
-                          _handleSelect(ref, rule);
-                        },
-                      ),
+                child: CommonCheckBox(
+                  value: isSelected,
+                  isCircle: true,
+                  onChanged: (_) {
+                    _handleSelect(ref, rule.id);
+                  },
+                ),
               ),
               title: Text(rule.value),
             ),
@@ -522,10 +508,7 @@ class RuleContent extends ConsumerWidget {
     );
   }
 
-  _handleSelect(WidgetRef ref, ruleId) {
-    if (!ref.read(profileOverrideStateProvider).isEdit) {
-      return;
-    }
+  _handleSelect(WidgetRef ref, String ruleId) {
     ref.read(profileOverrideStateProvider.notifier).updateState(
       (state) {
         final newSelectedRules = Set<String>.from(state.selectedRules);
@@ -594,26 +577,17 @@ class RuleContent extends ConsumerWidget {
         final rule = rules[index];
         return GestureDetector(
           key: ObjectKey(rule),
-          child: _buildItem(
-            rule,
-            index,
+          child: ReorderableDragStartListener(
+            index: index,
+            child: _buildItem(
+              rule,
+              index,
+            ),
           ),
           onTap: () {
             _handleSelect(ref, rule.id);
           },
-          onLongPress: () {
-            if (ref.read(profileOverrideStateProvider).isEdit) {
-              return;
-            }
-            ref.read(profileOverrideStateProvider.notifier).updateState(
-                  (state) => state.copyWith(
-                    isEdit: true,
-                    selectedRules: {
-                      rule.id,
-                    },
-                  ),
-                );
-          },
+          // },
         );
       },
       proxyDecorator: _proxyDecorator,

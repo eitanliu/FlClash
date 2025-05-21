@@ -260,7 +260,6 @@ class VpnState with _$VpnState {
 class ProfileOverrideStateModel with _$ProfileOverrideStateModel {
   const factory ProfileOverrideStateModel({
     ClashConfigSnippet? snippet,
-    required bool isEdit,
     required Set<String> selectedRules,
     OverrideData? overrideData,
   }) = _ProfileOverrideStateModel;

@@ -499,7 +499,6 @@ class ProfileOverrideState extends _$ProfileOverrideState {
   @override
   ProfileOverrideStateModel build() {
     return ProfileOverrideStateModel(
-      isEdit: false,
       selectedRules: {},
     );
   }
